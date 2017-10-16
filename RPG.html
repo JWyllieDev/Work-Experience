@@ -1,0 +1,64 @@
+<tw-storydata name="RPG" startnode="1" creator="Twine" creator-version="2.1.3" ifid="3493FF40-EB83-4875-9BCE-CC2CC08637D8" format="Harlowe" format-version="2.0.1" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">
+
+
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">
+
+
+</script><tw-passagedata pid="1" name="Startup" tags="" position="574,428">(set: $hp to 10) 
+(set: $coins to 10) 
+(set: $days to 0) 
+(set: $inv to (a:))
+(set: $dlevel to 0) 
+(set: $alevel to 1)
+(set: $mstrength to (either: 1,2,3,4))
+(set: $monsterHP to (either: 1,2,3,4,5))
+(Display: &quot;Main&quot;)</tw-passagedata><tw-passagedata pid="2" name="Main" tags="" position="873,601">You&#x27;ve been adventuring for $days days. You have $coins coins and your health is $hp. 
+[[Take some time out.]] 
+[[Go on an Adventure.]] 
+[[Spend your hard-earned cash]]</tw-passagedata><tw-passagedata pid="3" name="Take some time out." tags="" position="1026,495">(set: $hp to 10) (set: $days to $days + 1)
+You have slept, and feel refreshed.
+(display:&quot;Main&quot;)</tw-passagedata><tw-passagedata pid="4" name="Spend your hard-earned cash" tags="" position="1057,688">Pick your wares:
+(if: $inv contains &quot;wooden shield&quot;) [] (else:)[ [[wooden shield]] &lt;b&gt;FREE&lt;/b&gt; ]
+(if: $inv contains &quot;wooden sword&quot;) [](else:)[ [[wooden sword]] &lt;b&gt;10 coins&lt;/b&gt; ]
+[[None of these wares interest you|Main]]</tw-passagedata><tw-passagedata pid="5" name="Go on an Adventure." tags="" position="702,722">A monster appears! (set: $mstrength to $mstrength - $dlevel) (set: $monsterHP to $monsterHP - $alevel)
+[[Fight]]
+[[Flee!-&gt;Main]]</tw-passagedata><tw-passagedata pid="6" name="Fight" tags="noinv nostats" position="485,736">(if: (either: 0, 1) is 0)[  
+The monster bites you! 
+(set: $hp to $hp - $mstrength)  
+(if: $hp &lt; 1)[ You have [[died]]! ]  
+(else:)[ Your health is $hp. 
+[[Fight]] 
+[[flee|Main]] ]  
+]
+
+(else:)[ You hit the monster!  
+(set:$monsterHP = $monsterHP - 1)  
+(if: $monsterHP &lt; 1)[ The [[monster is dead]]! ]  
+(else:)[    
+Its health is $monsterHP.
+[[Fight]] 
+[[Flee|Main]] ]  
+]</tw-passagedata><tw-passagedata pid="7" name="died" tags="noinv nostats" position="218,944">You are dead! [[restart?|Startup]]</tw-passagedata><tw-passagedata pid="8" name="monster is dead" tags="" position="668,943">(set: $drop to (random: 3,10))
+(set: $coins to $coins + $drop)
+You collect $drop coins from the monster. You have $coins coins and your health is $hp.
+[[continue|Go on an Adventure.]]
+[[go home|Main]]</tw-passagedata><tw-passagedata pid="9" name="wooden shield" tags="" position="1205,726">(set: $inv to $inv + (a: &quot;wooden shield&quot;))
+(set: $dlevel to $dlevel +1)
+You have acquired a Wooden Shield, this gives +1 defense.
+[[Return?|Main]]</tw-passagedata><tw-passagedata pid="10" name="footer" tags="footer" position="1345,466">(if: (passage:)&#x27;s name is &quot;Inventory&quot;) [&lt;!--nothing happens!--&gt;] (else-if: (passage:)&#x27;s tags contains &quot;noinv&quot;) [&lt;!--Nothing happens--&gt;] 
+(else:)
+
+[Check [[Inventory]]].
+
+(if: (passage:)&#x27;s name is &quot;Inventory&quot;) [] (else-if: (passage:)&#x27;s tags contains &quot;nostats&quot;) [] (else:)[You have attack strength (print: $alevel), defense (print: $dlevel).]</tw-passagedata><tw-passagedata pid="11" name="Inventory" tags="" position="1345,618">You have (print: $coins) [ coins]
+(if: $inv&#x27;s length &gt; 0)[Your inventory contains a (print: $inv.join(&quot;, &quot;))]
+(else:)[Your inventory is empty.] 
+(link-goto: &quot;Return&quot;, (history:)&#x27;s last)</tw-passagedata><tw-passagedata pid="12" name="wooden sword" tags="" position="1010,890">(if: $coins &gt; 9) [
+You have bought a wooden sword!
+(set: $inv to $inv + (a: &quot;wooden sword&quot;))
+(set: $alevel to $alevel+1) [ This gives +1 attack.
+(set: $coins to $coins - 10)]
+]
+(else:) [ You do not have enough money to buy this!]
+
+[[Return?|Main]]</tw-passagedata></tw-storydata>
